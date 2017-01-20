@@ -1,0 +1,25 @@
+{
+  "name": "PriceTracker",
+  "version": "1.0.0",
+  "description": "NodeJS based web service to track the price changes on newegg.com",
+  "main": "web/server.js",
+  "dependencies": {
+    "ejs": "^2.5.5",
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node web/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cs580ice/PriceTracker.git"
+  },
+  "author": "Team Ice",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs580ice/PriceTracker.git/issues"
+  },
+  "homepage": "https://github.com/cs580ice/PriceTracker.git#readme"
+}
