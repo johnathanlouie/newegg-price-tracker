@@ -13,7 +13,7 @@ NodeJS based web service to track the price changes on newegg.com
 * (Optional) See price history by category
 
 ### Development HOWTOs
-* Run PriceTracker on your dev machine
+#### -- Run PriceTracker on your dev machine
 ```
 git clone https://github.com/cs580ice/PriceTracker.git <project_home>
 cd <project_home>
