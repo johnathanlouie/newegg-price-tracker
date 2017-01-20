@@ -13,11 +13,13 @@ NodeJS based web service to track the price changes on newegg.com
 * (Optional) See price history by category
 
 ### Development HOWTOs
-#### Run PriceTracker on your dev machine
-```sh
+* Run PriceTracker on your dev machine
+```
 git clone https://github.com/cs580ice/PriceTracker.git <project_home>
 cd <project_home>
 npm install
 npm start
+# Now you can access the web service via http://localhost:3000
 ```
-Now you can access the web service via http://localhost:3000
+    
+  
