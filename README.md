@@ -23,7 +23,7 @@ npm start
 Now you can access the web service via http://localhost:3000
 
 ### Add new service(url mapping)
-In <project_home>/server.js
+In web/server.js
 ```
 app.get('/demo/:user', function(request, response) {
 	response.send(request.params.user);
@@ -32,18 +32,7 @@ app.get('/demo/:user', function(request, response) {
 Try the new service http://localhost:3000/demo/InputAnythingYouWant
 
 ### Different content format of a service
-For plain text:
-```
-response.send( 'hello world' );
-```
-
-For JSON:
-```
-response.send( {message: 'hello world'} );
-```
-
-For HTML:
-```
-response.render( '<template_name>', model );
-```
+For plain text: ``` response.send( 'hello world' ); ```
+For JSON: ``` response.send( {message: 'hello world'} ); ```
+For HTML: ``` response.render( '<template_name>', model ); ```
 Note: locate templates in web/views/
