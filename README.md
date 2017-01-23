@@ -32,8 +32,8 @@ app.get('/demo/:user', function(request, response) {
 Try the new service http://localhost:3000/demo/InputAnythingYouWant
 
 ### Different content format of a service
-* For plain text: ```javascript response.send( 'hello world' ); ```
-* For JSON: ```javascript response.send( {message: 'hello world'} ); ```
-* For HTML: ```javascript response.render( '<template_name>', model ); ```
+* For plain text: ``` response.send( 'hello world' ); ```
+* For JSON: ``` response.send( {message: 'hello world'} ); ```
+* For HTML: ``` response.render( '<template_name>', model ); ```
 
 Note: locate templates in web/views/
