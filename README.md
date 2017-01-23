@@ -1,7 +1,7 @@
 # PriceTracker
 NodeJS based web service to track the price changes on newegg.com
 
-### System requirements
+## System requirements
 * [NodeJS](https://nodejs.org)
 * [Solr](http://lucene.apache.org/solr/)
 
