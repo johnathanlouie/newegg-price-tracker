@@ -16,9 +16,13 @@ app.use(express.static(path.join(__dirname, 'static')));
 // ************************
 // Add URL mapping: begin
 // ************************
+// Track product
 app.get('/product/track/json/:url', load('web.controller.TrackController'));
 
-
+// Simple demo
+app.get('/demo/:user', function(request, response) {
+	response.send(request.params.user);
+});
 // ************************
 // Add URL mapping: end
 // ************************
