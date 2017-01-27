@@ -13,6 +13,9 @@ app.set('view engine', 'ejs');
 // Static content settings
 app.use(express.static(path.join(__dirname, 'static')));
 
+// Parse POST application/json
+app.use(bodyParser.json());
+
 // ************************
 // Add URL mapping: begin
 // ************************
