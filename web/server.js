@@ -3,6 +3,7 @@ require('./base.js');
 var express = require('express');
 var app = express();
 var path = require('path');
+var bodyParser = require('body-parser');
 
 app.set('x-powered-by', false)
 
@@ -26,6 +27,10 @@ app.get('/product/track/json/:url', load('web.controller.TrackController'));
 app.get('/demo/:user', function(request, response) {
 	response.send(request.params.user);
 });
+
+// JSON POST demo
+app.post('/demo/post', load('web.controller.DemoPostController'));
+
 // ************************
 // Add URL mapping: end
 // ************************
