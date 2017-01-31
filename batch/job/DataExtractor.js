@@ -83,7 +83,6 @@ DataExtractor.processProducts = function(productIDs) {
 }
 
 DataExtractor.saveProductInfos = function(productList) {
-	// TODO: call api
 	// console.log(productList);
 	try {
 		const curl = load("domain.Curl");
@@ -184,32 +183,29 @@ DataExtractor.downloadPage = function(url) {
 DataExtractor.extractProduct = function(productId, pageContent) {
 	try {
 		// console.log(pageContent);
+		const parser = require('cheerio');
+		const selector = parser.load(pageContent);
 
 		let product = {productID: productId};
 
 		// Extract price
-		let regexp = /<meta itemprop='price' content='([^']+)'[^>]*>/;
-		let regResult = regexp.exec(pageContent);
-		if (regResult === null) {
+		let price = selector("meta[itemprop='price']").attr('content');
+		if (price === undefined) {
 			return Promise.reject({message: 'DataExtractor.extractProduct: Price not found in page'});
 		}
-		product.price = parseFloat(regResult[1]);
+		product.price = parseFloat(price.replace('$', ''));
 
 		// Extract title
-		regexp = /<title>([^<]*)<\/title>/;
-		regResult = regexp.exec(pageContent);
-		if (regResult === null) {
+		let title = selector("title").text();
+		if (title === undefined || title.length === 0) {
 			return Promise.reject({message: 'DataExtractor.extractProduct: Title not found in page'});
 		}
-		product.title = regResult[1];
+		title = title.replace(/ {0,1}- {0,1}Newegg\.com/, '');
+		product.title = title;
 
 		// Current date
-		regexp = /([^T]*)T([^T]*)Z/;
-		regResult = regexp.exec((new Date()).toISOString());
-		if (regResult === null) {
-			return Promise.reject({message: 'DataExtractor.extractProduct: Get current date failed'});
-		}
-		product.date = regResult[1];
+		const date = new Date();
+		product.date = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 
 		return product;
 	} catch(e) {
