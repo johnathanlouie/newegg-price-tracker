@@ -37,3 +37,12 @@ Try the new service http://localhost:3000/demo/InputAnythingYouWant
 * For HTML: ``` response.render( '<template_name>', model ); ```
 
 Note: locate templates in web/views/
+
+### Prepare the mongodb
+Use mongodb shell client(mongo) connect to your mongodb server, then execute the following commands
+```javascript
+use pricetrack
+db.createCollection("product")
+db.createCollection("history")
+db.product.createIndex({"productId":1},{unique:true})
+```
