@@ -20,7 +20,7 @@ DataExtractor.run = function() {
 // Return: ['productid1', 'productid2', ... ]
 // Error: {message: 'error message'}
 DataExtractor.getProductIDs = function() {
-	// return ['N82E16824236679', '9SIAAEU57D9390', '9SIA8SK3T28065'];
+	return ['N82E16824236679', '9SIAAEU57D9390', '9SIA8SK3T28065'];
 	try {
 		const listAPIUrl = loadConfig('api').listAPI;
 		return load('domain.Curl').get(listAPIUrl, 2000)
@@ -74,7 +74,7 @@ DataExtractor.processProducts = function(productIDs) {
 		return Promise.all(taskChains)
 		.then((allResults) => {
 			// all products done
-			console.log(allResults);
+			// console.log(allResults);
 		})
 	} catch(e) {
 		console.log(e);
@@ -92,8 +92,9 @@ DataExtractor.saveProductInfos = function(productList) {
 		return curl.post(storeAPIUrl, sendData, 30000, 'application/json')
 		.then( (httpReturn) => {
 			let jsonReturn = JSON.parse(httpReturn.data);
-			if (jsonReturn.error !== undefined) {
-				return Promise.reject({message: 'DataExtractor.saveProductInfos: ' + jsonReturn.error.message});
+			// console.log(jsonReturn);
+			if (!jsonReturn.status) {
+				return Promise.reject({message: 'DataExtractor.saveProductInfos: storeAPI failed'});
 			} else {
 				return { data: jsonReturn };
 			}
@@ -186,7 +187,7 @@ DataExtractor.extractProduct = function(productId, pageContent) {
 		const parser = require('cheerio');
 		const selector = parser.load(pageContent);
 
-		let product = {productID: productId};
+		let product = {productId: productId};
 
 		// Extract price
 		let price = selector("meta[itemprop='price']").attr('content');
