@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 // Add URL mapping: begin
 // ************************
 // Track product
-app.get('/product/track/json/:url', load('web.controller.TrackController'));
+app.post('/productid/', load('web.controller.TrackController'));
 
 // Simple demo
 app.get('/demo/:user', function(request, response) {
@@ -53,4 +53,7 @@ app.get('*', function(req, res) {
 
 app.listen(loadConfig('server').port, function() {
 	console.log('Server is listening on port ' + loadConfig('server').port);
-})
+});
+
+// Initialize database connection pool
+load('web.domain.MongoDB').connection.init();
