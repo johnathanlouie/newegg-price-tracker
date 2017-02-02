@@ -3,7 +3,7 @@ NodeJS based web service to track the price changes on newegg.com
 
 ## System requirements
 * [NodeJS](https://nodejs.org)
-* [MySQL](https://www.mysql.com)
+* [MongoDB](https://www.mongodb.com)
 
 ## Features
 * NodeJS based web service to track the price changes on newegg.com
