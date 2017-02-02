@@ -1,14 +1,15 @@
 module.exports = function(request, response) {
-	var renderPage = function() {
+	var renderPage = function(result) {
 		response.send({
-			status: true
+			status: true,
+			result: result
 		});
 	};
 
 	var renderError = function(error) {
 		response.send({
 			status: false,
-			error: error.message
+			message: error.message
 		})
 	};
 
@@ -33,31 +34,38 @@ function TrackController(productList) {
 			title: productList[i].title,
 			latestPrice: productList[i].price
 		});
+
+		this.history.push({
+			productId: productList[i].productId,
+			price: productList[i].price,
+			date: productList[i].date
+		});
 	}
 }
 
 TrackController.prototype.track = function() {
-	const collectionName = 'product';
-
-	return load('web.domain.MongoDB').connection.get(collectionName)
-		.then( (connection) => {
-			const collection = connection.collection(collectionName);
-			return this.insert(collection, this.products);
+	try {
+		// Insert product
+		const addProduct = load('web.domain.ProductDAO').insert(this.products)
+		.then( (insertCount) => {
+			return insertCount;
 		})
-		.then( (result) => {
-			return result;
-		})
-}
+		.catch( (error) => {
+			return Promise.reject( {message: error.message} );
+		});
 
-TrackController.prototype.insert = function(collection, docs) {
-	return new Promise( (resolve, reject) => {
-		const insertCallback = function(error, result) {
-			if (error === null) {
-				resolve(result);
-			} else {
-				reject( {message: error.message} );
-			}
-		};
-		collection.insertMany(docs, insertCallback);
-	});
+		// TODO: Insert price history
+		const addHistory = Promise.resolve( {} );
+
+		return Promise.all([addProduct, addHistory])
+		.then( ([productCount, historyReturn]) => {
+			return {productCount: productCount, history: historyReturn};
+		})
+		.catch( (error) => {
+			return Promise.reject( {message: error.message} );
+		});
+	} catch(error) {
+		console.log(error);
+		return Promise.reject( {message: 'TrackController.track(exception): ' + error.message} );		
+	}
 }
