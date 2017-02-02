@@ -1,4 +1,4 @@
 module.exports = {
-	product: 'mongodb://localhost:27017/pricetrack',
-	history: 'mongodb://localhost:27017/pricetrack'
+	pricetrack: 'mongodb://localhost:27017/pricetrack',
+	pricetrackTest: 'mongodb://localhost:27017/pricetrackTest',
 }
