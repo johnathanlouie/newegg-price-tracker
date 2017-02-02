@@ -94,7 +94,7 @@ DataExtractor.saveProductInfos = function(productList) {
 			let jsonReturn = JSON.parse(httpReturn.data);
 			// console.log(jsonReturn);
 			if (!jsonReturn.status) {
-				return Promise.reject({message: 'DataExtractor.saveProductInfos: storeAPI failed'});
+				return Promise.reject({message: 'DataExtractor.saveProductInfos: storeAPI failed(' + jsonReturn.message + ')'});
 			} else {
 				return { data: jsonReturn };
 			}
