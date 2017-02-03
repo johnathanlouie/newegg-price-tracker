@@ -84,6 +84,29 @@ ProductDAOTest.prototype.testUpdatePrice = function(products) {
 	});
 }
 
+ProductDAOTest.prototype.testUpdateSert = function(products) {
+	const test = require('assert');
+
+	const expected = {
+		productId: products[0].productId,
+		title: 'test update/insert',
+		latestPrice: products[0].latestPrice + 10
+	};
+
+	return this.dao.updateSert(expected)
+	.then( (updateCount) => {
+		test.equal(updateCount, 1);
+	})
+	.then( () => {
+		return this.dao.getByProductId(expected.productId);
+	})
+	.then( (doc) => {
+		for (let key in doc) {
+			test.equal(doc[key], expected[key]);
+		}
+	});
+}
+
 describe('ProductDAO', () => {
 	const testSuit = new ProductDAOTest();
 	const products = testSuit.generateProducts(10);
@@ -106,5 +129,9 @@ describe('ProductDAO', () => {
 
 	it('updatePrice', () => {
 		return testSuit.testUpdatePrice(products);
+	});
+
+	it('updateSert', () => {
+		return testSuit.testUpdateSert(products);
 	});
 });

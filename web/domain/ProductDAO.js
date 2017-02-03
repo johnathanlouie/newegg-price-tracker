@@ -3,7 +3,7 @@ var ProductDAO = ProductDAO || {
 	collectionName: 'product'
 }
 
-
+// {productId, title, latestPrice}
 ProductDAO.insert = function(products) {
 	try {
 		return this._getCollection()
@@ -19,6 +19,47 @@ ProductDAO.insert = function(products) {
 	} catch(e) {
 		console.log(e);
 		return Promise.reject({message: 'ProductDAO.insert(exception): ' + e.message});
+	}
+}
+
+ProductDAO.updatePrice = function(productId, price) {
+	try {
+		return this._getCollection()
+		.then( (collection) => {
+			return collection.updateOne({productId: productId}, {$set:{latestPrice: price}});
+		})
+		.then( (result) => {
+			return result.modifiedCount;
+		})
+		.catch((error) => {
+			return Promise.reject({message: 'ProductDAO.getByProductId: ' + error.message});
+		});
+	} catch(e) {
+		console.log(e);
+		return Promise.reject({message: 'ProductDAO.getByProductId(exception): ' + e.message});
+	}
+}
+
+// {productId, title, latestPrice}
+ProductDAO.updateSert = function(product) {
+	try {
+		return this._getCollection()
+		.then( (collection) => {
+			return collection.updateOne(
+				{productId: product.productId}, // filter
+				{productId: product.productId, title: product.title, latestPrice: product.latestPrice}, // new values
+				{upsert: true, w: 1} // insert if not exist
+				);
+		})
+		.then( (result) => {
+			return result.result.n;
+		})
+		.catch((error) => {
+			return Promise.reject({message: 'ProductDAO.updateSert: ' + error.message});
+		});
+	} catch(e) {
+		console.log(e);
+		return Promise.reject({message: 'ProductDAO.updateSert(exception): ' + e.message});
 	}
 }
 
@@ -51,24 +92,6 @@ ProductDAO.getByProductId = function(productId) {
 		})
 		.then( (result) => {
 			return result;
-		})
-		.catch((error) => {
-			return Promise.reject({message: 'ProductDAO.getByProductId: ' + error.message});
-		});
-	} catch(e) {
-		console.log(e);
-		return Promise.reject({message: 'ProductDAO.getByProductId(exception): ' + e.message});
-	}
-}
-
-ProductDAO.updatePrice = function(productId, price) {
-	try {
-		return this._getCollection()
-		.then( (collection) => {
-			return collection.updateOne({productId: productId}, {$set:{latestPrice: price}});
-		})
-		.then( (result) => {
-			return result.modifiedCount;
 		})
 		.catch((error) => {
 			return Promise.reject({message: 'ProductDAO.getByProductId: ' + error.message});
