@@ -1,8 +1,7 @@
 module.exports = function(request, response) {
 	var renderPage = function(result) {
 		response.send({
-			status: true,
-			result: result
+			status: true
 		});
 	};
 
@@ -19,53 +18,68 @@ module.exports = function(request, response) {
 	// {productId: '<id 2>', price: <price 2>, title: '<title 2>', date: <timestamp 2>},
 	// ...
 	// ]
-	const controller = new TrackController(request.body);
-	controller.track()
+	const controller = new TrackController();
+	controller.track(request.body)
 		.then(renderPage)
 		.catch(renderError);
 }
 
-function TrackController(productList) {
-	this.products = [];
-	this.history = [];
-	for (let i in productList) {
-		this.products.push({
-			productId: productList[i].productId,
-			title: productList[i].title,
-			latestPrice: productList[i].price
-		});
+function TrackController() {}
 
-		this.history.push({
-			productId: productList[i].productId,
-			price: productList[i].price,
-			date: productList[i].date
+TrackController.prototype.track = function(productList) {
+	try {
+		let taskChain = Promise.resolve();
+
+		for (let i in productList) {
+			const product = {
+				productId: productList[i].productId,
+				title: productList[i].title,
+				latestPrice: productList[i].price
+			};
+			const history = {
+				productId: productList[i].productId,
+				price: productList[i].price,
+				date: productList[i].date
+			};
+
+			taskChain = taskChain.then( () => {
+				return this.trackOne(product, history);
+			});
+		}
+
+		return taskChain.catch( (error) => {
+			return Promise.reject( {message: 'TrackController.track: ' + error.message} );
 		});
+	} catch(e) {
+		console.log(e);
+		return Promise.reject( {message: 'TrackController.track(exception): ' + e.message} );				
 	}
 }
 
-TrackController.prototype.track = function() {
+TrackController.prototype.trackOne = function(product, history) {
 	try {
-		// Insert product
-		const addProduct = load('web.domain.ProductDAO').insert(this.products)
-		.then( (insertCount) => {
-			return insertCount;
-		})
-		.catch( (error) => {
-			return Promise.reject( {message: error.message} );
-		});
+		const productDAO = load('web.domain.ProductDAO');
+		// const historyDAO = load('web.domain.HistoryDAO');
 
-		// TODO: Insert price history
-		const addHistory = Promise.resolve( {} );
-
-		return Promise.all([addProduct, addHistory])
-		.then( ([productCount, historyReturn]) => {
-			return {productCount: productCount, history: historyReturn};
+		return productDAO.updateSert(product)
+		.then( (docCount) => {
+			if (docCount !== 1) {
+				return Promise.reject('TrackController.trackOne: update/insert product failed(' + product.productId + ')');
+			}
+			// console.log(history);
+			return history;
 		})
+		// .then(historyDAO.insert.bind(historyDAO))
+		// .then( (insertCount) => {
+		// 	if (insertCount !== 1) {
+		// 		return Promist.reject('TrackController.trackOne: insert history failed(' + product.productId + ')');
+		// 	}
+		// })
 		.catch( (error) => {
-			return Promise.reject( {message: error.message} );
-		});
-	} catch(error) {
-		console.log(error);
-		return Promise.reject( {message: 'TrackController.track(exception): ' + error.message} );		
+			return Promise.reject( {message: 'TrackController.trackOne: ' + error.message} );
+		})
+	} catch(e) {
+		console.log(e);
+		return Promise.reject( {message: 'TrackController.trackOne(exception): ' + e.message} );		
 	}
 }
