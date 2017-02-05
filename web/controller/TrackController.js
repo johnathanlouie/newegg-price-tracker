@@ -1,15 +1,20 @@
-module.exports = function(request, response) {
-	var renderPage = function(result) {
+/* global Promise */
+
+module.exports = function(request, response)
+{
+	var renderPage = function(result)
+	{
 		response.send({
 			status: true
 		});
 	};
 
-	var renderError = function(error) {
+	var renderError = function(error)
+	{
 		response.send({
 			status: false,
 			message: error.message
-		})
+		});
 	};
 
 	// request.body:
@@ -20,17 +25,21 @@ module.exports = function(request, response) {
 	// ]
 	const controller = new TrackController();
 	controller.track(request.body)
-		.then(renderPage)
-		.catch(renderError);
-}
+			.then(renderPage)
+			.catch(renderError);
+};
 
-function TrackController() {}
+function TrackController()
+{}
 
-TrackController.prototype.track = function(productList) {
-	try {
+TrackController.prototype.track = function(productList)
+{
+	try
+	{
 		let taskChain = Promise.resolve();
 
-		for (let i in productList) {
+		for (let i in productList)
+		{
 			const product = {
 				productId: productList[i].productId,
 				title: productList[i].title,
@@ -42,44 +51,51 @@ TrackController.prototype.track = function(productList) {
 				date: productList[i].date
 			};
 
-			taskChain = taskChain.then( () => {
+			taskChain = taskChain.then(() => {
 				return this.trackOne(product, history);
 			});
 		}
 
-		return taskChain.catch( (error) => {
-			return Promise.reject( {message: 'TrackController.track: ' + error.message} );
+		return taskChain.catch((error) => {
+			return Promise.reject({message: 'TrackController.track: ' + error.message});
 		});
-	} catch(e) {
-		console.log(e);
-		return Promise.reject( {message: 'TrackController.track(exception): ' + e.message} );				
 	}
-}
+	catch (e)
+	{
+		console.log(e);
+		return Promise.reject({message: 'TrackController.track(exception): ' + e.message});
+	}
+};
 
-TrackController.prototype.trackOne = function(product, history) {
-	try {
+TrackController.prototype.trackOne = function(product, history)
+{
+	try
+	{
 		const productDAO = load('web.domain.ProductDAO');
 		// const historyDAO = load('web.domain.HistoryDAO');
 
 		return productDAO.updateSert(product)
-		.then( (docCount) => {
-			if (docCount !== 1) {
-				return Promise.reject('TrackController.trackOne: update/insert product failed(' + product.productId + ')');
-			}
-			// console.log(history);
-			return history;
-		})
-		// .then(historyDAO.insert.bind(historyDAO))
-		// .then( (insertCount) => {
-		// 	if (insertCount !== 1) {
-		// 		return Promist.reject('TrackController.trackOne: insert history failed(' + product.productId + ')');
-		// 	}
-		// })
-		.catch( (error) => {
-			return Promise.reject( {message: 'TrackController.trackOne: ' + error.message} );
-		})
-	} catch(e) {
-		console.log(e);
-		return Promise.reject( {message: 'TrackController.trackOne(exception): ' + e.message} );		
+				.then((docCount) => {
+					if (docCount !== 1)
+					{
+						return Promise.reject('TrackController.trackOne: update/insert product failed(' + product.productId + ')');
+					}
+					// console.log(history);
+					return history;
+				})
+				// .then(historyDAO.insert.bind(historyDAO))
+				// .then( (insertCount) => {
+				// 	if (insertCount !== 1) {
+				// 		return Promist.reject('TrackController.trackOne: insert history failed(' + product.productId + ')');
+				// 	}
+				// })
+				.catch((error) => {
+					return Promise.reject({message: 'TrackController.trackOne: ' + error.message});
+				});
 	}
-}
+	catch (e)
+	{
+		console.log(e);
+		return Promise.reject({message: 'TrackController.trackOne(exception): ' + e.message});
+	}
+};

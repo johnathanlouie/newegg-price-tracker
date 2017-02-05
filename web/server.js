@@ -1,3 +1,5 @@
+/* global load, loadConfig, __dirname */
+
 require('./base.js');
 
 var express = require('express');
@@ -5,7 +7,7 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
-app.set('x-powered-by', false)
+app.set('x-powered-by', false);
 
 // Template settings
 app.set('views', path.join(__dirname, 'views'));
@@ -23,8 +25,19 @@ app.use(bodyParser.json());
 // Track product
 app.post('/productid/', load('web.controller.TrackController'));
 
+app.get("/productid/:productId", function(req, res)
+{
+	var HistoryDAO = require("./domain/HistoryDAO.js");
+	HistoryDAO.getByProductId(req.params.productId)
+			.then(function(oox)
+			{
+				res.json(oox);
+			});
+});
+
 // Simple demo
-app.get('/demo/:user', function(request, response) {
+app.get('/demo/:user', function(request, response)
+{
 	response.send(request.params.user);
 });
 
@@ -36,14 +49,17 @@ app.post('/demo/post', load('web.controller.DemoPostController'));
 // ************************
 
 // Handle 404
-app.get('*', function(req, res) {
+app.get('*', function(req, res)
+{
 	res.status(404);
-	if (req.accepts('html')) {
+	if (req.accepts('html'))
+	{
 		res.render('404', {url: req.url});
 		return;
 	}
 
-	if (req.accepts('json')) {
+	if (req.accepts('json'))
+	{
 		res.send({error: 'Service not found:' + req.url});
 		return;
 	}
@@ -51,12 +67,13 @@ app.get('*', function(req, res) {
 	res.send('Service not found: ' + req.url);
 });
 
-app.listen(loadConfig('server').port, function() {
+app.listen(loadConfig('server').port, function()
+{
 	console.log('Server is listening on port ' + loadConfig('server').port);
 });
 
 // Initialize database connection pool
 load('web.domain.MongoDB').connection.init()
-	.catch( (error) => {
-		console.log(error);
-	});
+		.catch((error) => {
+			console.log(error);
+		});
