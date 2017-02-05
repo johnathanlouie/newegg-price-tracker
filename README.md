@@ -45,4 +45,5 @@ use pricetrack
 db.createCollection("product")
 db.createCollection("history")
 db.product.createIndex({"productId":1},{unique:true})
+db.history.createIndex({"productId":1},{unique:true})
 ```
