@@ -12,17 +12,19 @@ NodeJS based web service to track the price changes on newegg.com
 * (Optional) Compare price histories
 * (Optional) See price history by category
 
-## Development HOWTOs
-### Run PriceTracker on your dev machine
+## Installing PriceTracker
+### Install Stuff
+* Node.JS
+* MongoDB
+* Add the MongoDB directory to your PATH environment variable. MongoDB does not do this for you.
+* Clone our project and use npm to install dependencies.
 ```
 git clone https://github.com/cs580ice/PriceTracker.git <project_home>
 cd <project_home>
 npm install
-npm start
 ```
 
 ### Prepping MongoDB
-Add the MongoDB directory to your PATH environment variable.
 ```
 cd <project_home>
 mongo prep_mongodb.js
@@ -33,8 +35,15 @@ mongo prep_mongodb.js
 cd <project_home>
 mongoimport --db pricetrack --collection history --file samplehistory.json
 ```
+
+### Starting the Server
+```javascript
+cd <project_home>
+npm start
+```
 Now you can access the web service via http://localhost:3000
 
+## Development HOWTOs
 ### Add new service(url mapping)
 In web/server.js
 ```javascript
