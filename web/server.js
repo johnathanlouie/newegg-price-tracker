@@ -25,15 +25,7 @@ app.use(bodyParser.json());
 // Track product
 app.post('/productid/', load('web.controller.TrackController'));
 
-app.get("/productid/:productId", function(req, res)
-{
-	var HistoryDAO = require("./domain/HistoryDAO.js");
-	HistoryDAO.getByProductId(req.params.productId)
-			.then(function(oox)
-			{
-				res.json(oox);
-			});
-});
+app.get("/productid/:productId", load("web.controller.HistoryRequestHandler"));
 
 // Simple demo
 app.get('/demo/:user', function(request, response)

@@ -10,16 +10,18 @@ HistoryDAO.getByProductId = function(productId)
 	try
 	{
 		return this._getCollection()
-				.then((collection) => {
-					return collection.findOne(
-					{productId: productId},
-					{_id: false}
-					);
-				})
-				.then((result) => {
+				.then(
+						function(collection)
+						{
+							return collection.findOne({productId: productId}, {_id: false});
+						}
+				)
+				.then(function(result)
+				{
 					return result;
 				})
-				.catch((error) => {
+				.catch(function(error)
+				{
 					return Promise.reject({message: 'HistoryDAO.getByProductId: ' + error.message});
 				});
 	}
@@ -35,10 +37,12 @@ HistoryDAO._getCollection = function()
 	try
 	{
 		return load('web.domain.MongoDB').connection.get(this.dbName)
-				.then((connection) => {
+				.then(function(connection)
+				{
 					return connection.collection(this.collectionName);
 				})
-				.catch((error) => {
+				.catch(function(error)
+				{
 					return Promise.reject('HistoryDAO._getCollection: ' + error.message);
 				});
 	}
