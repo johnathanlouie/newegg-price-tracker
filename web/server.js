@@ -35,15 +35,6 @@ app.get("/productid/:productId", load("web.controller.HistoryRequestHandler"));
 /* The Data Extractor uses this to figure out which products to track. */
 app.get("/productid", load("web.controller.GetTrackedListHandler"));
 
-// Simple demo
-app.get('/demo/:user', function(request, response)
-{
-	response.send(request.params.user);
-});
-
-// JSON POST demo
-app.post('/demo/post', load('web.controller.DemoPostController'));
-
 // ************************
 // Add URL mapping: end
 // ************************
