@@ -43,10 +43,12 @@ function getParameterByName(name, url)
 
 /*
  need some 404 error handlers
- expected object fields
+ expected data if no error
  {
- product: {productId: '<product id>', title: '<title>', price: <current price>},
- history: [{price: <price 1>, date: <timestamp 1>}, {price: <price 2>, date: <timestamp 2>}, ... ]
+ productId: '<product id>',
+ title: '<title>',
+ price: <current price>},
+ history: [{price: <price 1>, timestamp: <timestamp 1>}, {price: <price 2>, timestamp: <timestamp 2>}, ... ]
  }
  */
 function serverResponseHandler(data, textStatus, jqXHR)
@@ -80,5 +82,6 @@ function startTrack(event)
 		url: '/productid/',
 		contentType: 'application/json',
 		data: JSON.stringify([{productId: productId}]),
-		success: trackCallback});
+		success: trackCallback
+	});
 }

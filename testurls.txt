@@ -5,3 +5,6 @@ https://www.newegg.com/Product/Product.aspx?Item=9SIA2F83PB2659
 
 ====Tracked with No Price History====
 https://www.newegg.com/Product/Product.aspx?Item=N82E16820231826
+
+====Not Tracked====
+https://www.newegg.com/Product/Product.aspx?Item=N82E16822236971&cm_sp=Homepage_BS-_-P3_22-236-971-_-02062017
