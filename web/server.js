@@ -1,3 +1,7 @@
+/* This is the server main start sequence and also the RESTful interface for
+ * Price Tracker. Its functions are serving the client's static files and
+ * forwarding REST requests to the proper request handlers.
+ */
 /* global load, loadConfig, __dirname */
 
 require('./base.js');
@@ -25,7 +29,11 @@ app.use(bodyParser.json());
 // Track product
 app.post('/productid/', load('web.controller.TrackController'));
 
+// Get product history
 app.get("/productid/:productId", load("web.controller.HistoryRequestHandler"));
+
+/* The Data Extractor uses this to figure out which products to track. */
+app.get("/productid", load("web.controller.GetTrackedListHandler"));
 
 // Simple demo
 app.get('/demo/:user', function(request, response)

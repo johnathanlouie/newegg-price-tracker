@@ -1,7 +1,7 @@
-$("#formIndex").submit(needName);
+$("#formIndex").submit(getPriceHistory);
 
 // sends the form request through ajax instead of normal
-function needName(e)
+function getPriceHistory(e)
 {
 	e.preventDefault();
 	var url = $("#formIndexUrl").val();
@@ -9,6 +9,16 @@ function needName(e)
 	var productId = getParameterByName("Item", url);
 	console.log("product id: " + productId);
 	$.get(`/productid/${productId}`, "", serverResponseHandler, "json");
+}
+
+// for testing if getting a list of tracked products works
+// use it by calling it in the browser console
+function getTrackedIds()
+{
+	$.get("/productid/", "", function(data, status, jqxhr)
+	{
+		console.log(data);
+	}, "json");
 }
 
 // name is field name in url query
