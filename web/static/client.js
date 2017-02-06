@@ -1,4 +1,5 @@
 $("#formIndex").submit(getPriceHistory);
+var alertHTML = $("#alertBox").html();
 
 // sends the form request through ajax instead of normal
 function getPriceHistory(e)
@@ -50,7 +51,34 @@ function getParameterByName(name, url)
  */
 function serverResponseHandler(data, textStatus, jqXHR)
 {
+	if (data === null)
+	{ // New product, start tracking
+		var alertBox = $("#alertBox");
+		alertBox.html(alertHTML);
+		alertBox.show();
+		$("#trackLink").on('click', startTrack);
+	}
 	// handler code here.
 	// create a table using the json object
 	console.log(data);
+}
+
+function startTrack(event)
+{
+	event.preventDefault();
+	$(".alert").alert('close');
+	var url = $("#formIndexUrl").val();
+	var productId = getParameterByName("Item", url);
+
+	var trackCallback = function(data, status)
+	{
+		// console.log(status);
+		// console.log(data);
+	};
+	$.ajax({
+		type: 'POST',
+		url: '/productid/',
+		contentType: 'application/json',
+		data: JSON.stringify([{productId: productId}]),
+		success: trackCallback});
 }
