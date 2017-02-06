@@ -1,4 +1,5 @@
 /* global Promise, load */
+// Deprecated, use HistoryDAO
 
 var ProductDAO = ProductDAO || {
 	dbName: 'pricetrack',

@@ -58,6 +58,80 @@ HistoryDAO.getProductIds = function()
 	}
 };
 
+// Return: number of documents inserted(should be 1)
+HistoryDAO.insertEmpty = function(productId)
+{
+	try
+	{
+		return this._getCollection()
+			.then( (collection) => {
+				return collection.insertOne( {productId: productId, title: '', history: []} );
+			})
+			.then( (result) => {
+				return result.insertedCount;
+			})
+			.catch( (error) => {
+				return Promise.reject( {message: 'HistoryDAO.insertEmpty: ' + error.message} );
+			});
+	}
+	catch(e)
+	{
+		console.log(e);
+		return Promise.reject({message: 'HistoryDAO.insertEmpty(exception): ' + e.message});
+	}
+};
+
+// Input: {productId, title, price, timestamp}
+// Return: number of documents updated(should be 1)
+HistoryDAO.update = function(product)
+{
+	try
+	{
+		return this._getCollection()
+			.then((collection) => {
+				return collection.updateOne(
+				{productId: product.productId}, // filter
+				{ // new value
+					$set: {title: product.title},
+					$push: {history: {price: product.price, timestamp: product.timestamp}}
+				});
+			})
+			.then((result) => {
+				return result.modifiedCount;
+			})
+			.catch((error) => {
+				return Promise.reject({message: 'HistoryDAO.update: ' + error.message});
+			});
+	}
+	catch (e)
+	{
+		console.log(e);
+		return Promise.reject({message: 'HistoryDAO.update: ' + e.message});
+	}
+};
+
+HistoryDAO._deleteAll = function()
+{
+	try
+	{
+		return this._getCollection()
+			.then((collection) => {
+				return collection.deleteMany({});
+			})
+			.then((result) => {
+				return result.deletedCount;
+			})
+			.catch((error) => {
+				return Promise.reject({message: 'HistoryDAO._deleteAll: ' + error.message});
+			});
+	}
+	catch (e)
+	{
+		console.log(e);
+		return Promise.reject({message: 'HistoryDAO._deleteAll: ' + e.message});
+	}
+};
+
 HistoryDAO._getCollection = function()
 {
 	var good = (connection) =>
