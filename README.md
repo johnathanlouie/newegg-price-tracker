@@ -20,6 +20,19 @@ cd <project_home>
 npm install
 npm start
 ```
+
+### Prepping MongoDB
+Add the MongoDB directory to your PATH environment variable.
+```
+cd <project_home>
+mongo prep_mongodb.js
+```
+
+### Import Test Data into MongoDB
+```
+cd <project_home>
+mongoimport --db pricetrack --collection history --file samplehistory.json
+```
 Now you can access the web service via http://localhost:3000
 
 ### Add new service(url mapping)
@@ -32,18 +45,8 @@ app.get('/demo/:user', function(request, response) {
 Try the new service http://localhost:3000/demo/InputAnythingYouWant
 
 ### Different content format of a service
-* For plain text: ``` response.send( 'hello world' ); ```
-* For JSON: ``` response.send( {message: 'hello world'} ); ```
-* For HTML: ``` response.render( '<template_name>', model ); ```
+* For plain text: ```javascript response.send( 'hello world' ); ```
+* For JSON: ```javascript response.json( {message: 'hello world'} ); ```
+* For HTML: ```javascript response.render( '<template_name>', model ); ```
 
 Note: locate templates in web/views/
-
-### Prepare the mongodb
-Use mongodb shell client(mongo) connect to your mongodb server, then execute the following commands
-```javascript
-use pricetrack
-db.createCollection("product")
-db.createCollection("history")
-db.product.createIndex({"productId":1},{unique:true})
-db.history.createIndex({"productId":1},{unique:true})
-```
