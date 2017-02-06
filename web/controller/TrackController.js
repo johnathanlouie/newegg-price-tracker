@@ -19,8 +19,8 @@ module.exports = function(request, response)
 
 	// request.body:
 	// [
-	// {productId: '<id 1>', price: <price 1>, title: '<title 1>', date: <timestamp 1>},
-	// {productId: '<id 2>', price: <price 2>, title: '<title 2>', date: <timestamp 2>},
+	// {productId: '<id 1>', price: <price 1>, title: '<title 1>', timestamp: <timestamp 1>},
+	// {productId: '<id 2>', price: <price 2>, title: '<title 2>', timestamp: <timestamp 2>},
 	// ...
 	// ]
 	const controller = new TrackController();
@@ -43,16 +43,12 @@ TrackController.prototype.track = function(productList)
 			const product = {
 				productId: productList[i].productId,
 				title: productList[i].title,
-				latestPrice: productList[i].price
-			};
-			const history = {
-				productId: productList[i].productId,
 				price: productList[i].price,
-				date: productList[i].date
+				timestamp: productList[i].timestamp
 			};
 
 			taskChain = taskChain.then(() => {
-				return this.trackOne(product, history);
+				return this.trackOne(product);
 			});
 		}
 
@@ -67,31 +63,41 @@ TrackController.prototype.track = function(productList)
 	}
 };
 
-TrackController.prototype.trackOne = function(product, history)
+TrackController.prototype.trackOne = function(product)
 {
 	try
 	{
-		const productDAO = load('web.domain.ProductDAO');
-		// const historyDAO = load('web.domain.HistoryDAO');
+		const historyDAO = load('web.domain.HistoryDAO');
 
-		return productDAO.updateSert(product)
-				.then((docCount) => {
+		let taskChain;
+		if (product.title === undefined || product.title.length === 0)
+		{	// Add new product to be tracked
+			taskChain = historyDAO.insertEmpty(product.productId)
+				.then( (docCount) => {
+					if (docCount !== 1) {
+						return Promise.reject('TrackController.trackOne: add product failed(' + product.productId + ')');
+					}
+					return true;
+				})
+				.catch( (error) => {
+					return Promise.reject({message: 'TrackController.trackOne: ' + error.message});
+				});
+		}
+		else
+		{	// Update product detail and price history
+			taskChain = historyDAO.update(product)
+				.then( (docCount) => {
 					if (docCount !== 1)
 					{
-						return Promise.reject('TrackController.trackOne: update/insert product failed(' + product.productId + ')');
+						return Promise.reject('TrackController.trackOne: update product failed(' + product.productId + ')');
 					}
-					// console.log(history);
-					return history;
+					return true;
 				})
-				// .then(historyDAO.insert.bind(historyDAO))
-				// .then( (insertCount) => {
-				// 	if (insertCount !== 1) {
-				// 		return Promist.reject('TrackController.trackOne: insert history failed(' + product.productId + ')');
-				// 	}
-				// })
 				.catch((error) => {
 					return Promise.reject({message: 'TrackController.trackOne: ' + error.message});
 				});
+		}
+		return taskChain;
 	}
 	catch (e)
 	{

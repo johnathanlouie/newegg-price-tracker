@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 // Add URL mapping: begin
 // ************************
 // Track product
-app.post('/productid/', load('web.controller.TrackController'));
+app.post('/productid', load('web.controller.TrackController'));
 
 // Get product history
 app.get("/productid/:productId", load("web.controller.HistoryRequestHandler"));
