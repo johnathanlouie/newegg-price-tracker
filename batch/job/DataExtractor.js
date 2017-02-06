@@ -20,7 +20,6 @@ DataExtractor.run = function() {
 // Return: ['productid1', 'productid2', ... ]
 // Error: {message: 'error message'}
 DataExtractor.getProductIDs = function() {
-	return ['N82E16824236679', '9SIAAEU57D9390', '9SIA8SK3T28065'];
 	try {
 		const listAPIUrl = loadConfig('api').listAPI;
 		return load('domain.Curl').get(listAPIUrl, 2000)
@@ -206,7 +205,7 @@ DataExtractor.extractProduct = function(productId, pageContent) {
 
 		// Current date
 		const date = new Date();
-		product.date = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+		product.timestamp = date.getFullYear()+'/'+(date.getMonth()+1)+'/'+date.getDate();
 
 		return product;
 	} catch(e) {
