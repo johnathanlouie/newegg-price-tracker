@@ -241,7 +241,7 @@ DataExtractor.extractProduct = function(productId, pageContent)
 		product.title = title;
 
 		// Current date
-		product.timestamp = new Date().toDateString();
+		product.timestamp = new Date();
 //		date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 
 		return product;
