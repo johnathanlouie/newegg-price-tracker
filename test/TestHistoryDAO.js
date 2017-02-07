@@ -38,8 +38,8 @@ HistoryDAOTest.prototype.testInsertEmpty = function(products) {
 			.then( () => {
 				return this.dao.insertEmpty(productId);
 			})
-			.then( (insertCount) => {
-				test.equal(1, insertCount);
+			.then( (insertResult) => {
+				test.equal(1, insertResult.count);
 			});
 	}
 

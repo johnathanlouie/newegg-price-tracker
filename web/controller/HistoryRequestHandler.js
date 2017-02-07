@@ -17,13 +17,35 @@ module.exports = function(request, response)
 };
 
 function Handler()
-{}
+{
+	this.STATUS_EXIST = 1;
+	this.STATUS_NOT_EXIST = 2;
+}
 
 Handler.prototype.getHistory = function(productId)
 {
+	const self = this;
 	function good(results)
 	{
-		return results;
+		if (results === null)
+		{	// Product has not been tracked
+			const historyDao = load("web.domain.HistoryDAO");
+			return historyDao.insertEmpty(productId)
+				.then( (insertResult) => {
+					if (insertResult.count !== 1)
+					{
+						return Promise.reject({message: 'HistoryRequestHandler: fail to insert'});
+					}
+					else
+					{
+						return {status: self.STATUS_NOT_EXIST, product: insertResult.product};
+					}
+				});
+		}
+		else
+		{
+			return {status: self.STATUS_EXIST, product: results};
+		}
 	}
 	function bad(err)
 	{
@@ -45,3 +67,7 @@ Handler.prototype.getHistory = function(productId)
 // if product is not being tracked add to list of tracked products and return
 // "now being tracked" and create an empty product profile
 // if product was already tracked but price history is empty return
+
+// Not being tracked: {status: 2, product: <empty product profile>}
+// Tracked: {status: 1, product: <product profile>}, <product profile> could be an empty one
+

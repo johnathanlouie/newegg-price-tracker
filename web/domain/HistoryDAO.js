@@ -58,17 +58,19 @@ HistoryDAO.getProductIds = function()
 	}
 };
 
-// Return: number of documents inserted(should be 1)
+// Return: {count:<insert count>, product:<empty product>}
 HistoryDAO.insertEmpty = function(productId)
 {
 	try
 	{
+		const emptyProduct = {productId: productId, title: '', images: [], history: []};
 		return this._getCollection()
 			.then((collection) => {
-				return collection.insertOne({productId: productId, title: '', history: []});
+				return collection.insertOne(emptyProduct);
 			})
 			.then((result) => {
-				return result.insertedCount;
+				delete emptyProduct._id;
+				return {count: result.insertedCount, product: emptyProduct};
 			})
 			.catch((error) => {
 				return Promise.reject({message: 'HistoryDAO.insertEmpty: ' + error.message});
