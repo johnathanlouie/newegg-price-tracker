@@ -39,6 +39,7 @@ mongoimport --db pricetrack --collection history --file samplehistory.json
 ### Starting the Server
 ```javascript
 cd <project_home>
+mongod --dbpath=<path_to_database_files>
 npm start
 ```
 Now you can access the web service via http://localhost:3000
