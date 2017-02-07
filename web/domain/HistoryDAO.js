@@ -92,7 +92,7 @@ HistoryDAO.update = function(product)
 				return collection.updateOne(
 					{productId: product.productId}, // filter
 					{// new value
-						$set: {title: product.title},
+						$set: {title: product.title, images: product.images},
 						$push: {history: {price: product.price, timestamp: product.timestamp}}
 					});
 			})

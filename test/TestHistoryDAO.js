@@ -8,12 +8,12 @@ function HistoryDAOTest() {
 HistoryDAOTest.prototype.generateProducts = function(num) {
 	const products = [];
 	for (let i = 0; i < num; i ++) {
-		const date = new Date();
 		products.push({
 			productId: 'testId' + i,
 			title: 'test product ' + i,
+			images: [`url_${i}_1`, `url_${i}_2`],
 			price: 10.0 + i,
-			timestamp: date.getFullYear()+'/'+(date.getMonth()+1)+'/'+date.getDate()
+			timestamp: new Date()
 		});
 	}
 	return products;
@@ -76,7 +76,10 @@ HistoryDAOTest.prototype.testUpdateAndGetByProductId = function(products) {
 				test.equal(doc.productId, expected.productId);
 				test.equal(doc.title, expected.title);
 				test.equal(doc.history[0].price, expected.price);
-				test.equal(doc.history[0].timestamp, expected.timestamp);
+				test.equal(doc.history[0].timestamp.getTime(), expected.timestamp.getTime());
+				for (let i in doc.images) {
+					test.equal(doc.images[i], expected.images[i]);
+				}
 			});
 	}
 

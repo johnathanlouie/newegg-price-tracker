@@ -19,8 +19,8 @@ module.exports = function(request, response)
 
 	// request.body:
 	// [
-	// {productId: '<id 1>', price: <price 1>, title: '<title 1>', timestamp: <timestamp 1>},
-	// {productId: '<id 2>', price: <price 2>, title: '<title 2>', timestamp: <timestamp 2>},
+	// {productId: '<id 1>', price: <price 1>, title: '<title 1>', timestamp: <timestamp 1>, images: ['url1', 'url2', ...]},
+	// {productId: '<id 2>', price: <price 2>, title: '<title 2>', timestamp: <timestamp 2>, images: ['url1', 'url2', ...]},
 	// ...
 	// ]
 	const controller = new TrackController();
@@ -41,6 +41,7 @@ TrackController.prototype.track = function(productList)
 			const product = {
 				productId: productList[i].productId,
 				title: productList[i].title,
+				images: productList[i].images,
 				price: productList[i].price,
 				timestamp: productList[i].timestamp
 			};

@@ -240,6 +240,17 @@ DataExtractor.extractProduct = function(productId, pageContent)
 		title = title.replace(/ {0,1}- {0,1}Newegg\.com/, '');
 		product.title = title;
 
+		// Product images
+		product.images = [];
+		const images = selector(".navThumbs > li > a > img");
+		images.each( (index) => {
+			// thumb: //images10.newegg.com/ProductImageCompressAll35/86-200-062-02.jpg
+			// image: //images10.newegg.com/ProductImage/86-200-062-02.jpg
+			const thumbUrl = images[index].attribs.src;
+			const imageUrl = 'https:' + thumbUrl.replace(/\/ProductImage.*\//, '/ProductImage/');
+			product.images.push(imageUrl);
+		})
+
 		// Current date
 		product.timestamp = new Date();
 //		date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
