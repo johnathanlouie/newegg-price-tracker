@@ -24,9 +24,7 @@ module.exports = function(request, response)
 	// ...
 	// ]
 	const controller = new TrackController();
-	controller.track(request.body)
-			.then(renderPage)
-			.catch(renderError);
+	controller.track(request.body).then(renderPage).catch(renderError);
 };
 
 function TrackController()
@@ -73,20 +71,21 @@ TrackController.prototype.trackOne = function(product)
 		if (product.title === undefined || product.title.length === 0)
 		{	// Add new product to be tracked
 			taskChain = historyDAO.insertEmpty(product.productId)
-				.then( (docCount) => {
-					if (docCount !== 1) {
+				.then((docCount) => {
+					if (docCount !== 1)
+					{
 						return Promise.reject('TrackController.trackOne: add product failed(' + product.productId + ')');
 					}
 					return true;
 				})
-				.catch( (error) => {
+				.catch((error) => {
 					return Promise.reject({message: 'TrackController.trackOne: ' + error.message});
 				});
 		}
 		else
 		{	// Update product detail and price history
 			taskChain = historyDAO.update(product)
-				.then( (docCount) => {
+				.then((docCount) => {
 					if (docCount !== 1)
 					{
 						return Promise.reject('TrackController.trackOne: update product failed(' + product.productId + ')');

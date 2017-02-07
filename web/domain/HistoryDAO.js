@@ -64,17 +64,17 @@ HistoryDAO.insertEmpty = function(productId)
 	try
 	{
 		return this._getCollection()
-			.then( (collection) => {
-				return collection.insertOne( {productId: productId, title: '', history: []} );
+			.then((collection) => {
+				return collection.insertOne({productId: productId, title: '', history: []});
 			})
-			.then( (result) => {
+			.then((result) => {
 				return result.insertedCount;
 			})
-			.catch( (error) => {
-				return Promise.reject( {message: 'HistoryDAO.insertEmpty: ' + error.message} );
+			.catch((error) => {
+				return Promise.reject({message: 'HistoryDAO.insertEmpty: ' + error.message});
 			});
 	}
-	catch(e)
+	catch (e)
 	{
 		console.log(e);
 		return Promise.reject({message: 'HistoryDAO.insertEmpty(exception): ' + e.message});
@@ -90,11 +90,11 @@ HistoryDAO.update = function(product)
 		return this._getCollection()
 			.then((collection) => {
 				return collection.updateOne(
-				{productId: product.productId}, // filter
-				{ // new value
-					$set: {title: product.title},
-					$push: {history: {price: product.price, timestamp: product.timestamp}}
-				});
+					{productId: product.productId}, // filter
+					{// new value
+						$set: {title: product.title},
+						$push: {history: {price: product.price, timestamp: product.timestamp}}
+					});
 			})
 			.then((result) => {
 				return result.modifiedCount;

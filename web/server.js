@@ -65,6 +65,6 @@ app.listen(loadConfig('server').port, function()
 
 // Initialize database connection pool
 load('web.domain.MongoDB').connection.init()
-		.catch((error) => {
-			console.log(error);
-		});
+	.catch((error) => {
+		console.log(error);
+	});

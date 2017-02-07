@@ -25,10 +25,10 @@ MongoDBConnection.close = function()
 	for (let dbName in config)
 	{
 		const task = Promise.resolve(dbName)
-				.then(this.get.bind(this))
-				.then((connection) => {
-					connection.close();
-				});
+			.then(this.get.bind(this))
+			.then((connection) => {
+				connection.close();
+			});
 		taskList.push(task);
 	}
 	return Promise.all(taskList).catch((error) => {
@@ -42,14 +42,14 @@ MongoDBConnection.get = function(dbName)
 	if (this._connectionList[dbName] === undefined)
 	{
 		return Promise.resolve(dbName)
-				.then(this.connect.bind(this))
-				.then((connection) => {
-					this._connectionList[dbName] = connection;
-					return connection;
-				})
-				.catch((error) => {
-					return Promise.reject({message: 'MongoDBConnection.get: ' + error.message});
-				});
+			.then(this.connect.bind(this))
+			.then((connection) => {
+				this._connectionList[dbName] = connection;
+				return connection;
+			})
+			.catch((error) => {
+				return Promise.reject({message: 'MongoDBConnection.get: ' + error.message});
+			});
 	}
 	else
 	{
@@ -70,14 +70,14 @@ MongoDBConnection.connect = function(dbName)
 
 		// Connect to DB
 		return mongoClient.connect(serverUrl)
-				.then((connection) => { // Success
-					// console.log('Create connection success: '+dbName);
-					return connection;
-				})
-				.catch((error) => { // Fail
-					console.log('Create connection fail: ' + dbName);
-					reject({message: error.message});
-				});
+			.then((connection) => { // Success
+				// console.log('Create connection success: '+dbName);
+				return connection;
+			})
+			.catch((error) => { // Fail
+				console.log('Create connection fail: ' + dbName);
+				reject({message: error.message});
+			});
 	}
 	catch (e)
 	{
