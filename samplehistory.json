@@ -1,6 +1,13 @@
 {
 	"productId": "N82E16811235048",
 	"title": "ZALMAN M1 Black Steel / Plastic Mini-ITX Tower PC Case",
+	"images": [
+		"https://images10.newegg.com/ProductImage/11-235-048-01.jpg",
+		"https://images10.newegg.com/ProductImage/11-235-048-02.jpg",
+		"https://images10.newegg.com/ProductImage/11-235-048-03.jpg",
+		"https://images10.newegg.com/ProductImage/11-235-048-04.jpg"
+	],
+	"latestPrice": 78.99,
 	"history":
 	[
 		{"price":78.99,"timestamp":"2017/2/4"},
@@ -43,6 +50,13 @@
 {
 	"productId": "N82E16834315672",
 	"title": "Acer Laptop Aspire E5-774G-52W1 Intel Core i5 7th Gen 7200U (2.50 GHz) 8 GB DDR4 Memory 256 GB SSD NVIDIA GeForce 940MX 17.3\" Windows 10 Home 64-Bit",
+	"images": [
+		"https://images10.newegg.com/ProductImage/34-315-672-V07.jpg",
+		"https://images10.newegg.com/ProductImage/34-315-672-V08.jpg",
+		"https://images10.newegg.com/ProductImage/34-315-672-V01.jpg",
+		"https://images10.newegg.com/ProductImage/34-315-672-V02.jpg"
+	],
+	"latestPrice": 549.99,
 	"history":
 	[
 		{"price":549.99,"timestamp":"2017/2/4"},
@@ -85,6 +99,13 @@
 {
 	"productId": "9SIA2F83PB2659",
 	"title": "SUPERMICRO SYS-5015A-EHF-D525 1U Intel Atom D525 Dual Gigabit LAN w/ IPMI Server Barebone",
+	"images": [
+		"https://images10.newegg.com/ProductImage/16-101-364-02.jpg",
+		"https://images10.newegg.com/ProductImage/16-101-364-03.jpg",
+		"https://images10.newegg.com/ProductImage/16-101-364-04.jpg",
+		"https://images10.newegg.com/ProductImage/16-101-364-05.jpg"
+	],
+	"latestPrice": 369.11,
 	"history":
 	[
 		{"price":369.11,"timestamp":"2017/2/4"},
@@ -127,5 +148,7 @@
 {
 	"productId": "N82E16820231826",
 	"title": "",
+	"images": [],
+	"latestPrice": 0,
 	"history": []
 }

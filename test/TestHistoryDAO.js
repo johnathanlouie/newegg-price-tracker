@@ -75,6 +75,7 @@ HistoryDAOTest.prototype.testUpdateAndGetByProductId = function(products) {
 			.then( (doc) => { // Check fields one by one
 				test.equal(doc.productId, expected.productId);
 				test.equal(doc.title, expected.title);
+				test.equal(doc.latestPrice, expected.price)
 				test.equal(doc.history[0].price, expected.price);
 				test.equal(doc.history[0].timestamp.getTime(), expected.timestamp.getTime());
 				for (let i in doc.images) {

@@ -63,7 +63,7 @@ HistoryDAO.insertEmpty = function(productId)
 {
 	try
 	{
-		const emptyProduct = {productId: productId, title: '', images: [], history: []};
+		const emptyProduct = {productId: productId, title: '', images: [], latestPrice: 0, history: []};
 		return this._getCollection()
 			.then((collection) => {
 				return collection.insertOne(emptyProduct);
@@ -94,7 +94,7 @@ HistoryDAO.update = function(product)
 				return collection.updateOne(
 					{productId: product.productId}, // filter
 					{// new value
-						$set: {title: product.title, images: product.images},
+						$set: {title: product.title, images: product.images, latestPrice: product.price},
 						$push: {history: {price: product.price, timestamp: product.timestamp}}
 					});
 			})
