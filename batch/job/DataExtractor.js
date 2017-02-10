@@ -133,6 +133,8 @@ DataExtractor.extractProducts = function(productIDs)
 {
 	try
 	{
+		const extractBiz = load('domain.ProductExtractBiz');
+
 		let resultList = [];
 		let taskChain = Promise.resolve();
 		for (let i in productIDs)
@@ -140,13 +142,12 @@ DataExtractor.extractProducts = function(productIDs)
 			taskChain = taskChain.then(() => {
 				return productIDs[i];
 			})
-				.then(this.getProductUrl.bind(this))
-				.then(this.downloadPage.bind(this))
+				.then(extractBiz.getProductUrl.bind(extractBiz))
+				.then(extractBiz.loadProductPage.bind(extractBiz))
 				.then((pageContent) => {
-					return this.extractProduct(productIDs[i], pageContent);
+					return extractBiz.extract(productIDs[i], pageContent);
 				})
 				.then((productInfo) => {
-					// console.log(productInfo);
 					resultList[i] = productInfo;
 					return resultList;
 				})
@@ -168,98 +169,5 @@ DataExtractor.extractProducts = function(productIDs)
 	{
 		console.log(e);
 		return Promise.reject({message: 'DataExtractor.extractProducts(exception): ' + e.message});
-	}
-};
-
-// Parameters:
-//   productId: newegg product id
-// Return:
-//   newegg product page url -- string
-DataExtractor.getProductUrl = function(productId)
-{
-	// https://www.newegg.com/Product/Product.aspx?Item={productId}
-	return 'https://www.newegg.com/Product/Product.aspx?Item=' + productId;
-};
-
-// Parameters:
-//   url: newegg product page url
-// Return:
-//   raw page content -- string
-DataExtractor.downloadPage = function(url)
-{
-	try
-	{
-		const curl = load("domain.Curl");
-
-		// Download page
-		let taskChain = curl.get(url, 10000);
-
-		// Get http return
-		taskChain = taskChain.then((httpReturn) => {
-			return httpReturn.data;
-		});
-
-		// Error handling
-		taskChain = taskChain.catch((error) => {
-			return Promise.reject({message: error.message});
-		});
-
-		return taskChain;
-	}
-	catch (e)
-	{
-		console.log(e);
-		return Promise.reject({message: "DataExtractor.downloadPage(exception): " + e.message});
-	}
-};
-
-DataExtractor.extractProduct = function(productId, pageContent)
-{
-	try
-	{
-		// console.log(pageContent);
-		const parser = require('cheerio');
-		const selector = parser.load(pageContent);
-
-		let product = {productId: productId};
-
-		// Extract price
-		let price = selector("meta[itemprop='price']").attr('content');
-		if (price === undefined)
-		{
-			return Promise.reject({message: 'DataExtractor.extractProduct: Price not found in page'});
-		}
-		product.price = parseFloat(price.replace('$', ''));
-
-		// Extract title
-		let title = selector("title").text();
-		if (title === undefined || title.length === 0)
-		{
-			return Promise.reject({message: 'DataExtractor.extractProduct: Title not found in page'});
-		}
-		title = title.replace(/ {0,1}- {0,1}Newegg\.com/, '');
-		product.title = title;
-
-		// Product images
-		product.images = [];
-		const images = selector(".navThumbs > li > a > img");
-		images.each( (index) => {
-			// thumb: //images10.newegg.com/ProductImageCompressAll35/86-200-062-02.jpg
-			// image: //images10.newegg.com/ProductImage/86-200-062-02.jpg
-			const thumbUrl = images[index].attribs.src;
-			const imageUrl = 'https:' + thumbUrl.replace(/\/ProductImage.*\//, '/ProductImage/');
-			product.images.push(imageUrl);
-		})
-
-		// Current date
-		product.timestamp = new Date();
-//		date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-
-		return product;
-	}
-	catch (e)
-	{
-		console.log(e);
-		return Promise.reject({message: 'DataExtractor.extractProduct(exception): ' + e.message});
 	}
 };
