@@ -9,7 +9,7 @@ module.exports = function(request, response)
 
 	function fail(err)
 	{
-		response.json({status: false, message: err.message});
+		response.json({error: err.message});
 	}
 
 	const handler = new Handler();
@@ -18,8 +18,6 @@ module.exports = function(request, response)
 
 function Handler()
 {
-	this.STATUS_EXIST = 1;
-	this.STATUS_NOT_EXIST = 2;
 }
 
 Handler.prototype.getHistory = function(productId)
@@ -29,27 +27,35 @@ Handler.prototype.getHistory = function(productId)
 	{
 		if (results === null)
 		{	// Product has not been tracked
+			const extractBiz = load('domain.ProductExtractBiz');
 			const historyDao = load("web.domain.HistoryDAO");
-			return historyDao.insertEmpty(productId)
+
+			return Promise.resolve(productId)
+				.then(extractBiz.getProductUrl.bind(extractBiz))
+				.then(extractBiz.loadProductPage.bind(extractBiz))
+				.then( (pageContent) => {
+					return extractBiz.extract(productId, pageContent);
+				})
+				.then(historyDao.insert.bind(historyDao))
 				.then( (insertResult) => {
 					if (insertResult.count !== 1)
 					{
-						return Promise.reject({message: 'HistoryRequestHandler: fail to insert'});
+						return Promise.reject({message: 'HistoryRequestHandler: insert failed'});
 					}
 					else
 					{
-						return {status: self.STATUS_NOT_EXIST, product: insertResult.product};
+						return insertResult.product;
 					}
 				});
 		}
 		else
 		{
-			return {status: self.STATUS_EXIST, product: results};
+			return results;
 		}
 	}
 	function bad(err)
 	{
-		Promise.reject({message: "HistoryRequestHandler: " + err.message});
+		return Promise.reject({message: "HistoryRequestHandler: " + err.message});
 	}
 
 	try
@@ -68,6 +74,4 @@ Handler.prototype.getHistory = function(productId)
 // "now being tracked" and create an empty product profile
 // if product was already tracked but price history is empty return
 
-// Not being tracked: {status: 2, product: <empty product profile>}
-// Tracked: {status: 1, product: <product profile>}, <product profile> could be an empty one
 

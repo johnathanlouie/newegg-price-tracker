@@ -83,7 +83,7 @@ HistoryDAO.insertEmpty = function(productId)
 	}
 };
 
-// Input: {productId, title, price, timestamp}
+// Input: {productId, title, images, price, timestamp}
 // Return: number of documents updated(should be 1)
 HistoryDAO.update = function(product)
 {
@@ -109,6 +109,39 @@ HistoryDAO.update = function(product)
 	{
 		console.log(e);
 		return Promise.reject({message: 'HistoryDAO.update: ' + e.message});
+	}
+};
+
+// Input: {productId, title, images, price, timestamp}
+// Return: {count: <insertCount>, product: <product profile>}
+HistoryDAO.insert = function(product)
+{
+	try
+	{
+		const doc = {
+			productId: product.productId,
+			title: product.title,
+			images: product.images,
+			latestPrice: product.price,
+			history: [{price: product.price, timestamp: product.timestamp}]
+		};
+
+		return this._getCollection()
+			.then((collection) => {
+				return collection.insertOne(doc);
+			})
+			.then((result) => {
+				delete doc._id;
+				return {count: result.insertedCount, product: doc};
+			})
+			.catch((error) => {
+				return Promise.reject({message: 'HistoryDAO.insert: ' + error.message});
+			});
+	}
+	catch (e)
+	{
+		console.log(e);
+		return Promise.reject({message: 'HistoryDAO.insert(exception): ' + e.message});
 	}
 };
 

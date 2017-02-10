@@ -17,7 +17,7 @@ HistoryDAOTest.prototype.generateProducts = function(num) {
 		});
 	}
 	return products;
-}
+};
 
 HistoryDAOTest.prototype.deleteAll = function() {
 	const test = require('assert');
@@ -26,7 +26,7 @@ HistoryDAOTest.prototype.deleteAll = function() {
 		.catch( (error) => {
 			test(null === error, 'Cleanup failed');
 		});
-}
+};
 
 HistoryDAOTest.prototype.testInsertEmpty = function(products) {
 	const test = require('assert');
@@ -44,7 +44,36 @@ HistoryDAOTest.prototype.testInsertEmpty = function(products) {
 	}
 
 	return taskChain;
-}
+};
+
+HistoryDAOTest.prototype.testInsert = function(products){
+	const test = require('assert');
+
+	let taskChain = Promise.resolve();
+	for (let i in products)
+	{
+		const expected = products[i];
+		taskChain = taskChain
+			.then( () => {
+				return this.dao.insert(expected);
+			})
+			.then( (insertResult) => {
+				test.equal(1, insertResult.count);
+
+				const doc = insertResult.product;
+				test.equal(doc.productId, expected.productId);
+				test.equal(doc.title, expected.title);
+				test.equal(doc.latestPrice, expected.price)
+				test.equal(doc.history[0].price, expected.price);
+				test.equal(doc.history[0].timestamp.getTime(), expected.timestamp.getTime());
+				for (let i in doc.images) {
+					test.equal(doc.images[i], expected.images[i]);
+				}				
+			});
+	}
+
+	return taskChain;
+};
 
 HistoryDAOTest.prototype.testGetProductIds = function(products) {
 	const test = require('assert');
@@ -104,6 +133,11 @@ describe('HistoryDAO', () => {
 	});
 
 	it('update and getByProductId', () => {
-		return testSuit.testUpdateAndGetByProductId(products);
+		return testSuit.testUpdateAndGetByProductId(products)
+			.then(testSuit.deleteAll.bind(testSuit));
+	});
+
+	it('insert', () => {
+		return testSuit.testInsert(products);
 	});
 });
