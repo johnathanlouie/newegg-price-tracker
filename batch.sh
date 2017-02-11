@@ -3,7 +3,7 @@
 # Global variables
 BASEDIR=$(dirname $0)
 PIDFILE="scheduler.pid"
-CMD="node batch/scheduler.js"
+CMD="nohup node batch/scheduler.js"
 
 # change current dirctory
 cd $BASEDIR
