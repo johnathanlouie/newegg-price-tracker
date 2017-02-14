@@ -1,3 +1,4 @@
+
 # PriceTracker
 NodeJS based web service to track the price changes on newegg.com
 
