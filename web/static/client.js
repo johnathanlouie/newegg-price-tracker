@@ -63,6 +63,19 @@ function serverResponseHandler(data, textStatus, jqXHR)
 	// handler code here.
 	// create a table using the json object
 	console.log(data);
+	$("#title").text(data.title);
+	$("#productID").text(" (productID: " + data.productId + ")");
+	$("#latestPrice").text("Latest price: $" + data.latestPrice);
+	$("#productPicture").attr("src", data.images[0]);
+	createTable(data.history);
+}
+
+//Creates a table of the product's prices over time
+function createTable(history) {
+    $("#table").jPut({
+        dataName: history,
+        name: "tbody_template",
+    });
 }
 
 function startTrack(event)
