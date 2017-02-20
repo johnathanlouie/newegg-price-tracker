@@ -72,10 +72,19 @@ function serverResponseHandler(data, textStatus, jqXHR)
 
 //Creates a table of the product's prices over time
 function createTable(history) {
-    $("#table").jPut({
-        dataName: history,
-        name: "tbody_template",
-    });
+    if (history.length > 0) {
+    	var json = history[0];
+    	console.log(json);
+    	var time = json.timestamp;
+    	time = time.substring(0, 10);
+    	var price = json.price;
+        var txt = "<tr><th>Date</th><th>Price</th></tr>" + "<tr><td>" + time + "</td><td>" + price + "</td></tr>";
+        $("#historyTable tr").remove();
+        $("#historyTable").append(txt);
+    }
+    else {
+        console.log("Error creating table..");
+    }
 }
 
 function startTrack(event)

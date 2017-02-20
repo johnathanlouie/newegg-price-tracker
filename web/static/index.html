@@ -38,7 +38,7 @@
         <form class="form-inline" id="formIndex">
           <div class="form-group" style="width:80%">
             <label class="sr-only" for="formIndexUrl">Product URL</label>
-            <input type="url" class="form-control" style="width:100%" id="formIndexUrl" placeholder="http://somesite.com/page">
+            <input type="url" class="form-control" style="width:100%" id="formIndexUrl" placeholder="https://www.newegg.com/Product/Product.aspx?Item={productID}">
           </div>
           <button type="submit" class="btn btn-primary">Track</button>
         </form>
@@ -49,7 +49,8 @@
         <p id="productName"><b><span id="title"></span></b><span id="productID"></span></p>
         <b><p id="latestPrice"></p></b>
         <img id="productPicture" src=""/>
-        <table id="historyTable" border="1"></table>
+        <table id="historyTable" border="1" cellpadding="10">
+        </table>
     </div>
     
     <div class="container" id="alertBox" style="display:none">
