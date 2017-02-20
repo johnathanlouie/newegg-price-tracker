@@ -78,7 +78,7 @@ function createTable(history) {
     	var time = json.timestamp;
     	time = time.substring(0, 10);
     	var price = json.price;
-        var txt = "<tr><th>Date</th><th>Price</th></tr>" + "<tr><td>" + time + "</td><td>" + price + "</td></tr>";
+        var txt = "<tr><th>Date</th><th>Price</th></tr>" + "<tr><td>" + time + "</td><td>$" + price + "</td></tr>";
         $("#historyTable tr").remove();
         $("#historyTable").append(txt);
     }
