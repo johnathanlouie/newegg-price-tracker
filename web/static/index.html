@@ -54,18 +54,25 @@
       </div>
     </div>
 
-    <div class="container" id="tableOutput" style="display:none">
+    <div class="container" id="outputContainer" style="display:none">
         <p id="productName"><b><span id="title"></span></b><span id="productID"></span></p>
         <b><p id="latestPrice"></p></b>
         <img id="productPicture" class="image"/>
-        <table id="historyTable"
-               class="highchart"
-               data-graph-container="#graph"
-               data-graph-type="line">
-            <caption>Price History</caption>
-        </table>
-
-        <div id="graph">
+        <div class="container" id="tableContainer">
+            <table id="historyTable"">
+            </table>
+            <table id="reversedTable"
+                   class="highchart"
+                   data-graph-container="#graph"
+                   data-graph-type="line"
+                   data-graph-legend-disabled="1"
+                   data-graph-xaxis-title-text="Date"
+                   data-graph-yaxis-1-title-text="Price ($)"
+                   style="display: none">
+                <caption>Price History</caption>
+            </table>
+            <div id="graph">
+            </div>
         </div>
     </div>
     

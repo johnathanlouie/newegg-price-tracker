@@ -85,29 +85,46 @@ function createTable(data) {
     $("#latestPrice").text("Latest price: $" + data.latestPrice);
     $("#productPicture").attr("src", data.images[0]);
     $("#productPicture").attr("width", "35%");
-	var history = data.history;
-    var json;
-    var time;
-    var txt = "<thead><tr><th>Date</th><th>Price ($)</th></tr></thead><tbody>";
-    for (var i = 0; i < history.length; i++) {
+
+	var history = data.history; //the array that has all of the price history
+	var len = history.length; //number of listings in price history
+    var json; //holds each price history listing
+    var time; //holds the time for each price history listing
+    var txt = "<tr><th>Date</th><th>Price ($)</th></tr>"; //for the table
+    var reversedtxt =  "<thead>" + txt + "</thead><tbody>"; //for the graph (reversed so that the graph makes chronological sense
+
+    for (var i = 0; i < len; i++) {
     	json = history[i];
-    	console.log(json);
     	time = json.timestamp.substring(0, 10);
     	txt += "<tr><td>" + time + "</td><td>" + json.price + "</td></tr>";
     }
-    txt += "</tbody>";
+    for (var i = len - 1; i >= 0; i--) {
+        json = history[i];
+        time = json.timestamp.substring(0, 10);
+        reversedtxt += "<tr><td>" + time + "</td><td>" + json.price + "</td></tr>";
+    }
+    reversedtxt += "</tbody>";
+
+    //Prepare table
     $("#historyTable thead").remove();
     $("#historyTable tbody").remove();
     $("#historyTable").append(txt);
-    if (history.length > 1) {
-        $('#historyTable').highchartTable();
+
+    //reversedTable is never actually displayed, it is only used to create the graph/chart
+    $("#reversedTable thead").remove();
+    $("#reversedTable tbody").remove();
+    $("#reversedTable").append(reversedtxt);
+
+    //if the product has a price history longer than just 1 entry, display a graph of the price history
+    if (len > 1) {
+        $('#reversedTable').highchartTable();
         $('#graph').show();
         $("tr:even").css("background-color", "#F0F0F0");
 	}
 	else {
     	$('#graph').hide();
 	}
-    $('#tableOutput').show();
+    $('#outputContainer').show(); //show the information about the item
 }
 
 function startTrack(event)

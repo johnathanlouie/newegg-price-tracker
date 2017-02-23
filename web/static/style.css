@@ -11,3 +11,22 @@ th {
 	background-color: #4CAA55;
 	color: white;
 }
+
+#tableContainer {
+	margin-top: 25px;
+}
+
+#historyTable {
+	margin-right: 20px;
+	float: left;
+}
+
+#graph {
+	margin-left: 20px;
+	float: left;
+	width: 70%;
+}
+
+.footer {
+	clear: both;
+}
