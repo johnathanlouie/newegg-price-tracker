@@ -1,15 +1,20 @@
-$("#formIndex").submit(getPriceHistory);
+$("#formIndex2").submit(getPriceHistory);
 var alertHTML = $("#alertBox").html();
+
+var data1 = null; //used to store the data of the first API call
 
 // sends the form request through ajax instead of normal
 function getPriceHistory(e)
 {
 	e.preventDefault();
 	var url = $("#formIndexUrl").val();
-	console.log("url: " + url);
+	//var url2 = $("#formIndexUrl2").val();
+	//console.log("url: " + url + "\n" + url2);
 	var productId = getParameterByName("Item", url);
-	console.log("product id: " + productId);
+	//var productId2 = getParameterByName("Item", url2);
+	//console.log("product id: " + productId + "\n" + productId2);
 	$.get(`/productid/${productId}`, "", serverResponseHandler, "json");
+    //$.get(`/productid/${productId2}`, "", serverResponseHandler, "json");
 }
 
 // for testing if getting a list of tracked products works
@@ -63,28 +68,46 @@ function serverResponseHandler(data, textStatus, jqXHR)
 	// handler code here.
 	// create a table using the json object
 	console.log(data);
-	$("#title").text(data.title);
-	$("#productID").text(" (productID: " + data.productId + ")");
-	$("#latestPrice").text("Latest price: $" + data.latestPrice);
-	$("#productPicture").attr("src", data.images[0]);
-	createTable(data.history);
+	/*if (data1 == null) {
+		data1 = data;
+		createTable(data);
+	}
+	else {
+		createTable(data1, data);
+	}*/
+	createTable(data);
 }
 
 //Creates a table of the product's prices over time
-function createTable(history) {
-    if (history.length > 0) {
-    	var json = history[0];
+function createTable(data) {
+    $("#title").text(data.title);
+    $("#productID").text(" (productID: " + data.productId + ")");
+    $("#latestPrice").text("Latest price: $" + data.latestPrice);
+    $("#productPicture").attr("src", data.images[0]);
+    $("#productPicture").attr("width", "35%");
+	var history = data.history;
+    var json;
+    var time;
+    var txt = "<thead><tr><th>Date</th><th>Price ($)</th></tr></thead><tbody>";
+    for (var i = 0; i < history.length; i++) {
+    	json = history[i];
     	console.log(json);
-    	var time = json.timestamp;
-    	time = time.substring(0, 10);
-    	var price = json.price;
-        var txt = "<tr><th>Date</th><th>Price</th></tr>" + "<tr><td>" + time + "</td><td>$" + price + "</td></tr>";
-        $("#historyTable tr").remove();
-        $("#historyTable").append(txt);
+    	time = json.timestamp.substring(0, 10);
+    	txt += "<tr><td>" + time + "</td><td>" + json.price + "</td></tr>";
     }
-    else {
-        console.log("Error creating table..");
-    }
+    txt += "</tbody>";
+    $("#historyTable thead").remove();
+    $("#historyTable tbody").remove();
+    $("#historyTable").append(txt);
+    if (history.length > 1) {
+        $('#historyTable').highchartTable();
+        $('#graph').show();
+        $("tr:even").css("background-color", "#F0F0F0");
+	}
+	else {
+    	$('#graph').hide();
+	}
+    $('#tableOutput').show();
 }
 
 function startTrack(event)
