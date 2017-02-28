@@ -53,8 +53,8 @@ Handler.prototype.getHistory = function(productId)
 			// Sort price history
 			const compare = function(a, b)
 			{
-				let a1 = a;
-				let b1 = b;
+				let a1 = a.timestamp;
+				let b1 = b.timestamp;
 				if (typeof a1 != 'object')
 				{
 					a1 = new Date(a1);
@@ -63,7 +63,7 @@ Handler.prototype.getHistory = function(productId)
 				{
 					b1 = new Date(b1);
 				}
-				return b1.timestamp.getTime() - a1.timestamp.getTime();
+				return b1.getTime() - a1.getTime();
 			};
 			results.history.sort(compare);
 			return results;
