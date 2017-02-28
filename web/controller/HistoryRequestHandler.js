@@ -50,6 +50,12 @@ Handler.prototype.getHistory = function(productId)
 		}
 		else
 		{
+			// Sort price history
+			const compare = function(a, b)
+			{
+				return b.timestamp.getTime() - a.timestamp.getTime();
+			};
+			results.history.sort(compare);
 			return results;
 		}
 	}
