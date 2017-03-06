@@ -43,7 +43,7 @@ TrackController.prototype.track = function(productList)
 				title: productList[i].title,
 				images: productList[i].images,
 				price: productList[i].price,
-				timestamp: productList[i].timestamp
+				timestamp: new Date(productList[i].timestamp)
 			};
 
 			taskChain = taskChain.then(() => {
