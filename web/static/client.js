@@ -1,20 +1,13 @@
-$("#formIndex2").submit(getPriceHistory);
+$("#formIndex").submit(getPriceHistory);
 var alertHTML = $("#alertBox").html();
-
-var data1 = null; //used to store the data of the first API call
 
 // sends the form request through ajax instead of normal
 function getPriceHistory(e)
 {
 	e.preventDefault();
 	var url = $("#formIndexUrl").val();
-	//var url2 = $("#formIndexUrl2").val();
-	//console.log("url: " + url + "\n" + url2);
 	var productId = getParameterByName("Item", url);
-	//var productId2 = getParameterByName("Item", url2);
-	//console.log("product id: " + productId + "\n" + productId2);
 	$.get(`/productid/${productId}`, "", serverResponseHandler, "json");
-    //$.get(`/productid/${productId2}`, "", serverResponseHandler, "json");
 }
 
 // for testing if getting a list of tracked products works
@@ -68,13 +61,6 @@ function serverResponseHandler(data, textStatus, jqXHR)
 	// handler code here.
 	// create a table using the json object
 	console.log(data);
-	/*if (data1 == null) {
-		data1 = data;
-		createTable(data);
-	}
-	else {
-		createTable(data1, data);
-	}*/
 	createTable(data);
 }
 
@@ -134,8 +120,7 @@ function startTrack(event)
 	var url = $("#formIndexUrl").val();
 	var productId = getParameterByName("Item", url);
 
-	var trackCallback = function(data, status)
-	{
+	var trackCallback = function(data, status) {
 		// console.log(status);
 		// console.log(data);
 	};
