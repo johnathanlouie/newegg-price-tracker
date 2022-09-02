@@ -15,3 +15,8 @@ services:
   mongodb:
     image: mongo:3.4
     container_name: newegg-price-tracker-mongodb
+    working_dir: /app/
+    volumes:
+      - ./samplehistory.json:/app/samplehistory.json
+      - ./prep_mongodb_test.js:/app/prep_mongodb_test.js
+      - ./prep_mongodb.js:/app/prep_mongodb.js

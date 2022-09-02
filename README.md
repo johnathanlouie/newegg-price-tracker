@@ -45,6 +45,13 @@ npm start
 ```
 Now you can access the web service via http://localhost:3000
 
+### Demo
+Try searching for these products for a demo:
+- `https://www.newegg.com/Product/Product.aspx?Item=N82E16811235048`.
+- `https://www.newegg.com/Product/Product.aspx?Item=N82E16834315672`.
+- `https://www.newegg.com/Product/Product.aspx?Item=9SIA2F83PB2659`.
+- `https://www.newegg.com/Product/Product.aspx?Item=N82E16820231826`.
+
 ## Development HOWTOs
 ### Add new service(url mapping)
 In web/server.js
