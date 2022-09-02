@@ -1,5 +1,5 @@
 {
-  "name": "PriceTracker",
+  "name": "newegg-price-tracker",
   "version": "1.0.0",
   "description": "NodeJS based web service to track the price changes on newegg.com",
   "main": "web/server.js",
