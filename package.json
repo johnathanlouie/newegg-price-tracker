@@ -14,7 +14,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "mocha",
-    "start": "node web/server.js"
+    "start": "node web/server.js",
+    "batch": "node batch/scheduler.js"
   },
   "repository": {
     "type": "git",
