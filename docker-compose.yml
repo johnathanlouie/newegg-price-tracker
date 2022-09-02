@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    image: newegg-price-tracker
+    container_name: newegg-price-tracker-app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '80:3000'
+    depends_on:
+      mongodb:
+        condition: service_started
+  mongodb:
+    image: mongo:3.4
+    container_name: newegg-price-tracker-mongodb

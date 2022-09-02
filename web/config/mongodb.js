@@ -1,4 +1,4 @@
 module.exports = {
-	pricetrack: 'mongodb://localhost:27017/pricetrack',
-	pricetrackTest: 'mongodb://localhost:27017/pricetrackTest'
+	pricetrack: 'mongodb://newegg-price-tracker-mongodb:27017/pricetrack',
+	pricetrackTest: 'mongodb://newegg-price-tracker-mongodb:27017/pricetrackTest'
 };
