@@ -19,12 +19,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cs580ice/PriceTracker.git"
+    "url": "git+https://github.com/johnathanlouie/newegg-price-tracker.git"
   },
   "author": "Team Ice",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cs580ice/PriceTracker.git/issues"
+    "url": "https://github.com/johnathanlouie/newegg-price-tracker/issues"
   },
-  "homepage": "https://github.com/cs580ice/PriceTracker.git#readme"
+  "homepage": "https://github.com/johnathanlouie/newegg-price-tracker#readme"
 }
